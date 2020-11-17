@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <title>US Energy Consumption</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <script type="application/javascript">
         // `state` and arrays of consumption per year => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
@@ -17,6 +17,21 @@
     </script>
 </head>
 <body >
-    <!-- create template here -->
+    <table>
+        <thead>
+            <tr>
+                <th>year</th>
+                <th>coal</th>
+                <th>natural_gas</th>
+                <th>nuclear</th>
+                <th>petroleum</th>
+                <th>renewable</th>
+                <th>total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {DATA}
+        </tbody>
+    </table>
 </body>
 </html>
