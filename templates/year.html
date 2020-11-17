@@ -8,15 +8,78 @@
     <script type="application/javascript">
         // `year` and total counts for entire US => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
-        var year;
-        var coal_count;
-        var natural_gas_count;
-        var nuclear_count;
-        var petroleum_count;
-        var renewable_count;
+        var state=[];
+        var year=[];
+        var coal_count=[];
+        var natural_gas_count=[];
+        var nuclear_count=[];
+        var petroleum_count=[];
+        var renewable_count=[];
+        var total=[];
+
+        function refresh(){
+            myTab=document.getElementById("table");
+            for (i = 1; i < myTab.rows.length; i++) {
+                state.push(myTab.rows[i].cells[0].innerHTML);
+                year.push(myTab.rows[i].cells[1].innerHTML);
+                coal_count.push(myTab.rows[i].cells[2].innerHTML);
+                natural_gas_count.push(myTab.rows[i].cells[3].innerHTML);
+                nuclear_count.push(myTab.rows[i].cells[4].innerHTML);
+                petroleum_count.push(myTab.rows[i].cells[5].innerHTML);
+                renewable_count.push(myTab.rows[i].cells[6].innerHTML);
+                total.push(myTab.rows[i].cells[7].innerHTML);
+            } 
+        }        
+        
+        function next(){
+            var curryear=year[0];
+            var year1=parseInt(curryear)+1;
+            if(year1>2018){
+                window.location.href="/year/1960";
+            }
+            else{
+                window.location.href="/year/"+year1;
+            }
+        }
+
+        function prev(){
+            var curryear=year[0];
+            var year2=parseInt(curryear)-1;
+            if(year2<1960){
+                window.location.href="/year/2018";
+            }
+            else{
+                window.location.href="/year/"+year2;
+            }
+        }
+        
+
+        function display(){
+            document.getElementById("display").innerHTML="hi  "+year.toString();
+        }
     </script>
 </head>
-<body>
-    <!-- create template here -->
+<body onload="refresh();" onload="myChart.update();">
+    <p id="display"></p>
+    <button onclick="prev()">Previous</button>
+    <button onclick="next()">Next</button>
+    <button onclick="display()">Display</button>
+    <table border="1px" id="table">
+        <thead>
+        <tr>
+            <th>State</th>
+            <th>Year</th>
+            <th>Coal</th>
+            <th>Natural Gas</th>
+            <th>Nuclear</th>
+            <th>Petroleum</th>
+            <th>Renewable</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+            {data}
+        </tbody>
+    </table>
 </body>
 </html>
