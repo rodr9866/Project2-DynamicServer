@@ -194,10 +194,14 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                         count=count+1;
                         var energy=0;
                         if(req.params.selected_energy_source=="coal"){energy=row.coal;}
-                        if(req.params.selected_energy_source=="natural_gas"){energy=row.natural_gas;}
-                        if(req.params.selected_energy_source=="nuclear"){energy=row.nuclear;}
-                        if(req.params.selected_energy_source=="petroleum"){energy=row.petroleum;}
-                        if(req.params.selected_energy_source=="renewable"){energy=row.renewable;}
+                        else if(req.params.selected_energy_source=="natural_gas"){energy=row.natural_gas;}
+                        else if(req.params.selected_energy_source=="nuclear"){energy=row.nuclear;}
+                        else if(req.params.selected_energy_source=="petroleum"){energy=row.petroleum;}
+                        else if(req.params.selected_energy_source=="renewable"){energy=row.renewable;}
+                        else{
+                            res.status(404).type(".txt").send(req.params.selected_energy_source + "does not exist in the database"); 
+                        }
+
                         if(count==1){
                             total=total+energy;
                             string=string+"<tr><td>"+row.year+"</td>";
@@ -218,6 +222,8 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                     });
                     string=string+"</tbody><table>";
                     //console.log(string);
+                    template = template.replace("{ENERGYIMG}", "/images/" + req.params.selected_energy_source.toLowerCase() + ".png");
+                    template = template.replace("{ENERGYALT}", "image of " + req.params.selected_energy_source.toLowerCase());
                     res.write(template.replace('{data}',string));
                     res.end();
                 }
