@@ -3,13 +3,13 @@
     "version": "0.0.0",
     "description": "Dynamic Web Server using Node JS",
     "author": {
-        "name": "",
-        "email": ""
+        "name": "Ricky Rodriguez",
+        "email": "ricky.rodriguez@stthomas.edu"
     },
     "contributors": [
         {
-            "name": "",
-            "email": ""
+            "name": "Sean Corrigan",
+            "email": "sean.corrigan@stthomas.edu"
         },
         {
             "name": "",
@@ -19,9 +19,10 @@
     "main": "server.js",
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "https://github.com/rodr9866/Project2-DynamicServer.git"
     },
     "dependencies": {
+        "chart.js": "^2.9.4",
         "express": "^4.17.1",
         "sqlite3": "^5.0.0"
     }
