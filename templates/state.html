@@ -8,25 +8,51 @@
     <script type="application/javascript">
         // `state` and arrays of consumption per year => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
-        var state;
-        var coal_counts;  // e.g. [1234, 2567, ...]
-        var natural_gas_counts;
-        var nuclear_counts;
-        var petroleum_counts;
-        var renewable_counts;
+        var state=[];
+        var coal_counts=[];  // e.g. [1234, 2567, ...]
+        var natural_gas_counts = [];
+        var nuclear_counts=[];
+        var petroleum_counts=[];
+        var renewable_counts=[];
+
+        function refresh(){
+            myTab=document.getElementById("table");
+            for (i = 1; i < myTab.rows.length; i++) {
+                coal_counts.push(myTab.rows[i].cells[1].innerHTML);
+                natural_gas_counts.push(myTab.rows[i].cells[2].innerHTML);
+                nuclear_counts.push(myTab.rows[i].cells[3].innerHTML);
+                petroleum_counts.push(myTab.rows[i].cells[4].innerHTML);
+                renewable_counts.push(myTab.rows[i].cells[5].innerHTML);
+                total.push(myTab.rows[i].cells[6].innerHTML);
+            }
+             
+        } 
+        function next(){
+            window.location.href="/state/{NEXT}";
+        }
+
+        function prev(){
+            window.location.href="/state/{PREV}";
+        }
     </script>
 </head>
 <body >
+    <h1>{STATE}</h1>
+    <img src="{STATEIMG}" alt="{STATEALT}" height="200px" width="auto">
+    </br>
+    <button onclick="prev()">Previous</button>
+    <button onclick="next()">Next</button>
+    <button onclick="display()">Display</button>
     <table>
         <thead>
             <tr>
-                <th>year</th>
-                <th>coal</th>
-                <th>natural_gas</th>
-                <th>nuclear</th>
-                <th>petroleum</th>
-                <th>renewable</th>
-                <th>total</th>
+                <th>Year</th>
+                <th>Coal</th>
+                <th>Natural_gas</th>
+                <th>Nuclear</th>
+                <th>Petroleum</th>
+                <th>Renewable</th>
+                <th>Total</th>
             </tr>
         </thead>
         <tbody>
