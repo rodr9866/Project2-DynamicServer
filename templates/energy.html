@@ -8,11 +8,172 @@
     <script type="application/javascript">
         // `energy_type` and object of consumption per year per state => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
-        var energy_type;
-        var energy_counts;  // e.g. {AK: [...], AL: [...], AR: [...], ...}
+
+        var types=["coal","natural_gas","nuclear","petroleum", "renewable"];
+        var pageURL = window.location.href;
+        var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+        var energy_type=""+lastURLSegment;
+        var energy_counts=new Array();  // e.g. {AK: [...], AL: [...], AR: [...], ...}
+        var count=[];
+        var states=[];
+
+        
+
+        function refresh(){
+            var array=[];
+            myTab=document.getElementById("table");
+            for(i=1; i<52; i++){
+                array=[];
+                for (j = 1; j < myTab.rows.length; j++) {
+                array.push(parseInt(myTab.rows[j].cells[i].innerHTML));
+                }
+                states.push(myTab.rows[0].cells[i].innerHTML)
+                energy_counts[i-1]=array;
+            }
+            for(z=1960; z<2019; z++){
+                count.push(z);
+            }
+            var type=energy_type;
+            if(energy_type=="coal"){type="Coal"}
+            if(energy_type=="natural_gas"){type="Natural Gas"}
+            if(energy_type=="nuclear"){type="Nuclear"}
+            if(energy_type=="petroleum"){type="Petroleum"}
+            if(energy_type=="renewable"){type="Renewable Sources"}
+
+            document.getElementById("display").innerHTML="State Energy Production from " + type;
+        }        
+
+        function statelist(){
+            return states;
+        }
+
+        function energies(){
+            return energy_counts;
+        }
+
+        function counting(){
+            return count;
+        }
+
+        function next(){
+            var num= types.indexOf(energy_type)+1;
+            var newEnergy= types[num%5];
+            window.location.href="/energy/"+newEnergy;
+        }
+
+        function prev(){
+            var num= types.indexOf(energy_type)-1;
+            if(num<0){
+                num=4;
+            }
+            var newEnergy= types[num%5];
+            window.location.href="/energy/"+newEnergy;
+        }
+
+        function year(){
+            window.location.href="/year/2018";
+        }
+
+        function energy(){
+            window.location.href="/energy/coal";
+        }
+        function state(){
+            window.location.href="/state/AK";
+        }
+        
+        function display(){
+            document.getElementById("display").innerHTML="hi  "+energy_type +"   "+ energy_counts[1].toString()+document.getElementById("table").rows[1].cells[1].innerHTML;
+        }
+        
+
     </script>
+    <style>
+        .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        }
+        .dropbtn {
+          background-color: #4CAF50;
+          color: white;
+          padding: 16px;
+          font-size: 16px;
+          border: none;
+        }
+        
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+        
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1; 
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+        
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+        
+        .dropdown-content a:hover {background-color: #ddd;}
+        
+        .dropdown:hover .dropdown-content {display: block;}
+        
+        .dropdown:hover .dropbtn {background-color: #3e8e41;}
+        </style>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
-<body>
-    <!-- create template here -->
+<body onload="refresh(); plot();">
+
+    <h1 id="display"></h1>
+    <div id="tester" style="width:1000px;height:1000px;"></div>
+    <button onclick="prev()" class="button">Previous</button>
+    <div class="dropdown">
+        <button class="dropbtn">Select Source</button>
+        <div class="dropdown-content">
+          <a href="/energy/coal">Coal</a>
+          <a href="/energy/natural_gas">Natural Gas</a>
+          <a href="/energy/nuclear">Nuclear</a>
+          <a href="/energy/petroleum">Petroleum</a>
+          <a href="/energy/renewable">Renewable</a>
+        </div>
+      </div>
+    <script>
+        function plot(){
+            TESTER = document.getElementById('tester');
+            var c=counting()
+            var e=energies()
+            var s=statelist();
+            data=[];
+            for(i=0;i<51;i++){
+                data.push({x: c, y: e[i], mode: 'lines+markers', name: s[i]});
+            }
+            Plotly.newPlot(TESTER, data);
+        }
+    </script>
+    
+    <button onclick="state()" class="button">State</button>
+    <button onclick="year()" class="button">Year</button>
+    <button onclick="energy()" class="button">Energy</button>
+    <button onclick="next()" class="button">Next</button>
+    
+
+    <table border="1px" id="table">
+    {data}
+    </table>
 </body>
 </html>
