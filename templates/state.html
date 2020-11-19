@@ -20,12 +20,12 @@
         function refresh(){
             myTab=document.getElementById("table");
             for (i = 1; i < myTab.rows.length; i++) {
-                coal_counts.push(parseInt(myTab.rows[i].cells[1].innerHTML));
-                natural_gas_counts.push(parseInt(myTab.rows[i].cells[2].innerHTML));
-                nuclear_counts.push(parseInt(myTab.rows[i].cells[3].innerHTML));
-                petroleum_counts.push(parseInt(myTab.rows[i].cells[4].innerHTML));
-                renewable_counts.push(parseInt(myTab.rows[i].cells[5].innerHTML));
-                total.push(parseInt(myTab.rows[i].cells[6].innerHTML));
+                coal_counts.push(parseFloat(myTab.rows[i].cells[1].innerHTML)/parseFloat(myTab.rows[i].cells[6].innerHTML));
+                natural_gas_counts.push(parseFloat(myTab.rows[i].cells[2].innerHTML)/parseFloat(myTab.rows[i].cells[6].innerHTML));
+                nuclear_counts.push(parseFloat(myTab.rows[i].cells[3].innerHTML)/parseFloat(myTab.rows[i].cells[6].innerHTML));
+                petroleum_counts.push(parseFloat(myTab.rows[i].cells[4].innerHTML)/parseFloat(myTab.rows[i].cells[6].innerHTML));
+                renewable_counts.push(parseFloat(myTab.rows[i].cells[5].innerHTML)/parseFloat(myTab.rows[i].cells[6].innerHTML));
+                total.push(parseFloat(myTab.rows[i].cells[6].innerHTML));
                 count.push(i+1959);
             }
         }
@@ -41,9 +41,9 @@
             x.push(nuclear_counts);
             x.push(petroleum_counts);
             x.push(renewable_counts);
+            x.push(total);
             return x;
         }
-
         function yeardir(){
             window.location.href="/year/2018";
         }
