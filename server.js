@@ -60,19 +60,23 @@ app.get('/year/:selected_year', (req, res) => {
                     res.write('cannot read from database');
                     res.end();
                 }
-                rows.forEach((row) => {
-                    var state=row.state_abbreviation;
-                    var coal_count=row.coal;
-                    var natural_gas_count=row.natural_gas;
-                    var nuclear_count=row.nuclear;
-                    var petroleum_count=row.petroleum;
-                    var renewable_count=row.renewable;
-                    var total= coal_count+natural_gas_count+nuclear_count+petroleum_count+renewable_count;
-                    //data.push({year: year, coal_count: coal_count, natural_gas_count: natural_gas_count, nuclear_count: nuclear_count, petroleum_count: petroleum_count, renewable_count: renewable_count, total: total});
-                    string=string+'<tr> <td>'+state+'</td>'+'<td>'+coal_count+'</td>'+'<td>'+natural_gas_count+'</td>'+'<td>'+nuclear_count+'</td>'+'<td>'+petroleum_count+'</td>'+'<td>'+renewable_count+'</td>'+'<td>'+total+'</td> </tr>';
-                });
-                res.write(template.replace('{data}',string));
-                res.end();
+                if(rows.length==0){
+                    res.status(404).type(".txt").send("Year: " + req.params.selected_year + " does not exist in the database"); 
+                }else{
+                    rows.forEach((row) => {
+                        var state=row.state_abbreviation;
+                        var coal_count=row.coal;
+                        var natural_gas_count=row.natural_gas;
+                        var nuclear_count=row.nuclear;
+                        var petroleum_count=row.petroleum;
+                        var renewable_count=row.renewable;
+                        var total= coal_count+natural_gas_count+nuclear_count+petroleum_count+renewable_count;
+                        //data.push({year: year, coal_count: coal_count, natural_gas_count: natural_gas_count, nuclear_count: nuclear_count, petroleum_count: petroleum_count, renewable_count: renewable_count, total: total});
+                        string=string+'<tr> <td>'+state+'</td>'+'<td>'+coal_count+'</td>'+'<td>'+natural_gas_count+'</td>'+'<td>'+nuclear_count+'</td>'+'<td>'+petroleum_count+'</td>'+'<td>'+renewable_count+'</td>'+'<td>'+total+'</td> </tr>';
+                    });
+                    res.write(template.replace('{data}',string));
+                    res.end();
+                }
             });
         }
     });
@@ -199,7 +203,7 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                         else if(req.params.selected_energy_source=="petroleum"){energy=row.petroleum;}
                         else if(req.params.selected_energy_source=="renewable"){energy=row.renewable;}
                         else{
-                            res.status(404).type(".txt").send(req.params.selected_energy_source + "does not exist in the database"); 
+                            res.status(404).type(".txt").send(req.params.selected_energy_source + " does not exist in the database"); 
                         }
 
                         if(count==1){
