@@ -14,19 +14,47 @@
         var nuclear_counts=[];
         var petroleum_counts=[];
         var renewable_counts=[];
+        var total=[];
+        var count=[];
 
         function refresh(){
             myTab=document.getElementById("table");
             for (i = 1; i < myTab.rows.length; i++) {
-                coal_counts.push(myTab.rows[i].cells[1].innerHTML);
-                natural_gas_counts.push(myTab.rows[i].cells[2].innerHTML);
-                nuclear_counts.push(myTab.rows[i].cells[3].innerHTML);
-                petroleum_counts.push(myTab.rows[i].cells[4].innerHTML);
-                renewable_counts.push(myTab.rows[i].cells[5].innerHTML);
-                total.push(myTab.rows[i].cells[6].innerHTML);
+                coal_counts.push(parseInt(myTab.rows[i].cells[1].innerHTML));
+                natural_gas_counts.push(parseInt(myTab.rows[i].cells[2].innerHTML));
+                nuclear_counts.push(parseInt(myTab.rows[i].cells[3].innerHTML));
+                petroleum_counts.push(parseInt(myTab.rows[i].cells[4].innerHTML));
+                renewable_counts.push(parseInt(myTab.rows[i].cells[5].innerHTML));
+                total.push(parseInt(myTab.rows[i].cells[6].innerHTML));
+                count.push(i+1959);
             }
+        }
+        
+        function counting(){
+            return count;
+        }
+
+        function getData(){
+            var x=[];
+            x.push(coal_counts);
+            x.push(natural_gas_counts);
+            x.push(nuclear_counts);
+            x.push(petroleum_counts);
+            x.push(renewable_counts);
+            return x;
+        }
+
+        function year(){
+            window.location.href="/year/2018";
+        }
+
+        function energy(){
+            window.location.href="/energy/coal";
+        }
+        function state(){
+            window.location.href="/state/AK";
+        }
              
-        } 
         function next(){
             window.location.href="/state/{NEXT}";
         }
@@ -35,15 +63,34 @@
             window.location.href="/state/{PREV}";
         }
     </script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
-<body >
+<body onload="refresh(); plot();">
     <h1>{STATE}</h1>
+    <div id="tester" style="width:1000px;height:1000px;"></div>
+    <script>
+        function plot(){
+            TESTER = document.getElementById('tester');
+            var c=counting();
+            var d=getData();
+            data=[];
+                data.push({x: c, y: d[0], mode: 'lines+markers', name: "Coal"});
+                data.push({x: c, y: d[1], mode: 'lines+markers', name: "Natural Gas"});
+                data.push({x: c, y: d[2], mode: 'lines+markers', name: "Nuclear"});
+                data.push({x: c, y: d[3], mode: 'lines+markers', name: "Petroleum"});
+                data.push({x: c, y: d[4], mode: 'lines+markers', name: "Renewable Sources"});
+            Plotly.newPlot(TESTER, data);
+        }
+    </script>
+    
     <img src="{STATEIMG}" alt="{STATEALT}" height="200px" width="auto">
     </br>
-    <button onclick="prev()">Previous</button>
-    <button onclick="next()">Next</button>
-    <button onclick="display()">Display</button>
-    <table>
+    <button onclick="prev()" class="button">Previous</button>
+    <button onclick="state()" class="button">State</button>
+    <button onclick="year()" class="button">Year</button>
+    <button onclick="energy()" class="button">Energy</button>
+    <button onclick="next()" class="button">Next</button>
+    <table id="table">
         <thead>
             <tr>
                 <th>Year</th>
